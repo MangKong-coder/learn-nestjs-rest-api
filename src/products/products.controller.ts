@@ -15,12 +15,12 @@ export class ProductsController {
 	constructor(private readonly productsService: ProductsService) {}
 
 	@Post()
-	addProduct(
+	async addProduct(
 		@Body('title') prodTitle: string,
 		@Body('description') prodDesc: string,
 		@Body('price') prodPrice: number
 	) {
-		const generatedId = this.productsService.insertProduct(
+		const generatedId = await this.productsService.insertProduct(
 			prodTitle,
 			prodDesc,
 			prodPrice
@@ -39,19 +39,24 @@ export class ProductsController {
 	}
 
 	@Patch(':id')
-	updateProduct(
+	async updateProduct(
 		@Param('id') prodId: string,
 		@Body('title') prodTitle: string,
 		@Body('description') prodDesc: string,
 		@Body('price') prodPrice: number
 	) {
-		this.productsService.updateProduct(prodId, prodTitle, prodDesc, prodPrice);
-		return null;
+		const update = await this.productsService.updateProduct(
+			prodId,
+			prodTitle,
+			prodDesc,
+			prodPrice
+		);
+		return update;
 	}
 
 	@Delete(':id')
-	deleteProduct(@Param('id') prodId: string) {
-		this.productsService.deleteProduct(prodId);
-		return null;
+	async deleteProduct(@Param('id') prodId: string) {
+		const result = await this.productsService.deleteProduct(prodId);
+		return result;
 	}
 }
